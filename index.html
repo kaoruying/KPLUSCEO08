@@ -364,6 +364,65 @@
       background: linear-gradient(110deg, #8D671B, var(--gold));
     }
 
+
+    .compact-note {
+      padding: 13px 16px;
+    }
+
+    .compact-note .gift-icon {
+      width: 38px;
+      height: 38px;
+      font-size: 21px;
+    }
+
+    .event-preview {
+      margin-top: 20px;
+      padding: 20px 18px;
+      border: 1px solid rgba(0, 42, 110, 0.16);
+      border-radius: 16px;
+      background: #FFFFFF;
+      text-align: left;
+    }
+
+    .event-label {
+      margin-bottom: 12px;
+      color: var(--orange);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+    }
+
+    .event-date {
+      color: var(--navy);
+      font-size: 17px;
+      font-weight: 900;
+    }
+
+    .event-speaker {
+      margin-top: 9px;
+      color: var(--ink);
+      font-size: 25px;
+      font-weight: 900;
+    }
+
+    .event-title {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .event-topic {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      color: var(--white);
+      background: var(--navy);
+      font-size: 14px;
+      font-weight: 900;
+    }
+
     @keyframes rise {
       from { opacity: 0; transform: translateY(12px); }
       to { opacity: 1; transform: translateY(0); }
@@ -462,11 +521,10 @@
                 <h1>K PLUS CEO講堂｜課後回饋</h1>
         <p class="lead">謝謝您參與今天的課程，請留下您的回饋。</p>
 
-        <div class="gift-preview">
+        <div class="gift-preview compact-note">
           <div class="gift-icon" aria-hidden="true">🎁</div>
           <div>
             <strong>完成問卷，日後即可獲得課程大禮包</strong>
-            <span>課程大禮包將於日後提供。</span>
           </div>
         </div>
 
@@ -566,10 +624,15 @@
         <section id="successBox" class="success" aria-live="polite">
           <div class="success-icon">✓</div>
           <h2>感謝您的回饋！</h2>
-          <p>
-            您已完成本次課後問卷。<br />
-            課程大禮包將於日後提供。
-          </p>
+          <p>您已完成本次課後問卷。</p>
+
+          <div class="event-preview">
+            <div class="event-label">下一場活動預告</div>
+            <div class="event-date">11／10　台北場</div>
+            <div class="event-speaker">陳慧蓉</div>
+            <div class="event-title">前台灣微軟首席營運長</div>
+            <div class="event-topic">教練引導力</div>
+          </div>
         </section>
 
         <iframe
@@ -646,25 +709,12 @@
 
       submitTimer = setTimeout(function () {
         if (isSubmitting) {
-          showError("目前無法完成送出，請確認 Apps Script 已重新部署為最新版本。");
+          showError("資料尚未成功寫入，請確認 Apps Script 的表單設定與部署版本。");
         }
       }, 30000);
 
       // 使用隱藏 iframe 送出，可避免 GitHub Pages 跳離問卷頁面。
       HTMLFormElement.prototype.submit.call(form);
-    });
-
-
-    // Apps Script 有時會因瀏覽器的跨網域限制，無法把成功訊息傳回主頁。
-    // 只要送出後隱藏 iframe 完成載入，就視為送出流程已完成。
-    submissionFrame.addEventListener("load", function () {
-      if (!isSubmitting) return;
-
-      window.setTimeout(function () {
-        if (isSubmitting) {
-          showSuccess();
-        }
-      }, 700);
     });
 
     window.addEventListener("message", function (event) {
