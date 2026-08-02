@@ -1,1 +1,665 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#002A6E" />
+  <title>K PLUS CEO講堂｜課後回饋</title>
+
+  <style>
+    :root {
+      --navy: #002A6E;
+      --blue: #005B88;
+      --orange: #F4510B;
+      --gold: #C99A3D;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #DDE5F0;
+      --soft: #F3F7FC;
+      --white: #FFFFFF;
+      --success: #18794E;
+      --danger: #B42318;
+      --shadow: 0 20px 55px rgba(0, 42, 110, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family:
+        "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+        system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(0, 91, 136, 0.12), transparent 30%),
+        radial-gradient(circle at 95% 12%, rgba(244, 81, 11, 0.10), transparent 25%),
+        linear-gradient(180deg, #F7FAFE 0%, #EEF4FB 100%);
+      padding: 28px 14px 48px;
+    }
+
+    .page {
+      width: min(760px, 100%);
+      margin: 0 auto;
+    }
+
+    .brand-bar {
+      height: 7px;
+      border-radius: 999px 999px 0 0;
+      background: linear-gradient(90deg, var(--navy) 0 58%, var(--orange) 58% 75%, var(--gold) 75%);
+    }
+
+    .card {
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.97);
+      border: 1px solid rgba(0, 42, 110, 0.08);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .content {
+      padding: 34px 38px 38px;
+    }
+
+    .brand {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .brand-name {
+      color: var(--navy);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    .brand-partner {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      text-align: right;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      color: var(--navy);
+      background: var(--soft);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--navy);
+      font-size: clamp(28px, 5vw, 42px);
+      line-height: 1.22;
+      letter-spacing: -0.02em;
+    }
+
+    .lead {
+      margin: 14px 0 20px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.75;
+    }
+
+    .gift-preview {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 0 0 28px;
+      padding: 16px 18px;
+      border: 1px solid rgba(201, 154, 61, 0.35);
+      border-radius: 16px;
+      background: linear-gradient(135deg, #FFF9EC 0%, #FFFFFF 100%);
+    }
+
+    .gift-icon {
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 13px;
+      background: #FFF0C9;
+      font-size: 24px;
+    }
+
+    .gift-preview strong {
+      display: block;
+      color: #7A5714;
+      font-size: 16px;
+    }
+
+    .gift-preview span {
+      display: block;
+      margin-top: 3px;
+      color: #806A3A;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 26px 0 14px;
+      color: var(--navy);
+      font-size: 17px;
+      font-weight: 900;
+    }
+
+    .section-title::before {
+      content: "";
+      width: 5px;
+      height: 20px;
+      border-radius: 99px;
+      background: var(--orange);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+
+    label.question,
+    .question {
+      display: block;
+      margin-bottom: 9px;
+      color: var(--ink);
+      font-size: 16px;
+      font-weight: 800;
+      line-height: 1.55;
+    }
+
+    .required {
+      margin-left: 4px;
+      color: var(--orange);
+    }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      border: 1.5px solid var(--line);
+      border-radius: 13px;
+      background: var(--white);
+      color: var(--ink);
+      font: inherit;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input[type="text"] {
+      height: 52px;
+      padding: 0 15px;
+    }
+
+    textarea {
+      min-height: 112px;
+      padding: 14px 15px;
+      line-height: 1.6;
+      resize: vertical;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(0, 91, 136, 0.10);
+    }
+
+    .hint {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .rating {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 9px;
+    }
+
+    .rating input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .rating label {
+      display: grid;
+      place-items: center;
+      min-height: 70px;
+      padding: 10px 6px;
+      border: 1.5px solid var(--line);
+      border-radius: 13px;
+      background: var(--white);
+      color: #344054;
+      cursor: pointer;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1.35;
+      transition: transform 0.18s, border-color 0.18s, background 0.18s, color 0.18s;
+    }
+
+    .rating label:hover {
+      transform: translateY(-2px);
+      border-color: #A9BCD5;
+    }
+
+    .rating input:focus-visible + label {
+      outline: 3px solid rgba(0, 91, 136, 0.18);
+      outline-offset: 2px;
+    }
+
+    .rating input:checked + label {
+      border-color: var(--navy);
+      background: var(--navy);
+      color: var(--white);
+      box-shadow: 0 8px 18px rgba(0, 42, 110, 0.18);
+    }
+
+    .submit-btn,
+    .gift-btn {
+      width: 100%;
+      min-height: 56px;
+      border: 0;
+      border-radius: 14px;
+      color: var(--white);
+      background: linear-gradient(110deg, var(--navy), var(--blue));
+      box-shadow: 0 12px 25px rgba(0, 42, 110, 0.23);
+      cursor: pointer;
+      font: inherit;
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      transition: transform 0.18s, box-shadow 0.18s, opacity 0.18s;
+    }
+
+    .submit-btn:hover,
+    .gift-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 30px rgba(0, 42, 110, 0.28);
+    }
+
+    .submit-btn:disabled {
+      cursor: wait;
+      opacity: 0.65;
+      transform: none;
+    }
+
+    .privacy {
+      margin: 11px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .status {
+      display: none;
+      margin-top: 18px;
+      padding: 13px 15px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .status.error {
+      display: block;
+      color: var(--danger);
+      background: #FFF1F0;
+      border: 1px solid #F7C8C4;
+    }
+
+    .success {
+      display: none;
+      margin-top: 30px;
+      padding: 26px;
+      border: 1px solid rgba(24, 121, 78, 0.22);
+      border-radius: 18px;
+      background: linear-gradient(145deg, #F0FFF8, #FFFFFF);
+      text-align: center;
+    }
+
+    .success.show {
+      display: block;
+      animation: rise 0.45s ease both;
+    }
+
+    .success-icon {
+      display: grid;
+      place-items: center;
+      width: 58px;
+      height: 58px;
+      margin: 0 auto 12px;
+      border-radius: 50%;
+      color: var(--white);
+      background: var(--success);
+      font-size: 30px;
+      font-weight: 900;
+    }
+
+    .success h2 {
+      margin: 0;
+      color: var(--success);
+      font-size: 25px;
+    }
+
+    .success p {
+      margin: 9px 0 18px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .gift-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      background: linear-gradient(110deg, #8D671B, var(--gold));
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 680px) {
+      body {
+        padding: 12px 10px 30px;
+      }
+
+      .card {
+        border-radius: 18px;
+      }
+
+      .content {
+        padding: 25px 18px 28px;
+      }
+
+      .brand {
+        align-items: flex-start;
+      }
+
+      .brand-name {
+        font-size: 19px;
+      }
+
+      .brand-partner {
+        max-width: 150px;
+        font-size: 11px;
+        line-height: 1.45;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .rating {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .rating label {
+        min-height: 58px;
+      }
+
+      .rating > div:last-child {
+        grid-column: 1 / -1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <section class="card">
+      <div class="brand-bar"></div>
+
+      <div class="content">
+        <div class="brand">
+          <div class="brand-name">K PLUS CEO講堂</div>
+          <div class="brand-partner">凱基人壽 × 商周CEO學院</div>
+        </div>
+
+        <div class="eyebrow">課後回饋｜約 30 秒完成</div>
+        <h1>謝謝您參與今天的課程</h1>
+        <p class="lead">
+          邀請您留下簡短回饋，協助我們持續規劃更貼近處經理需求的學習內容。
+        </p>
+
+        <div class="gift-preview">
+          <div class="gift-icon" aria-hidden="true">🎁</div>
+          <div>
+            <strong>完成問卷，即可獲得課程紙本大禮包</strong>
+            <span>完成後將依活動安排提供紙本資料。</span>
+          </div>
+        </div>
+
+        <form
+          id="surveyForm"
+          method="POST"
+          target="submissionFrame"
+          autocomplete="on"
+          novalidate
+        >
+          <div class="section-title">基本資料</div>
+
+          <div class="grid">
+            <div class="field">
+              <label class="question" for="office">
+                通訊處名稱<span class="required">*</span>
+              </label>
+              <input
+                id="office"
+                name="office"
+                type="text"
+                maxlength="80"
+                placeholder="請輸入通訊處名稱"
+                required
+              />
+            </div>
+
+            <div class="field">
+              <label class="question" for="respondentName">
+                姓名<span class="required">*</span>
+              </label>
+              <input
+                id="respondentName"
+                name="name"
+                type="text"
+                maxlength="40"
+                placeholder="請輸入姓名"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="section-title">課後回饋</div>
+
+          <fieldset class="field" style="border:0;padding:0;margin-left:0;margin-right:0;">
+            <legend class="question">
+              1. 您對本次「K PLUS CEO講堂」的整體滿意度為何？
+              <span class="required">*</span>
+            </legend>
+
+            <div class="rating">
+              <div>
+                <input id="rating5" type="radio" name="satisfaction" value="非常滿意" required />
+                <label for="rating5">非常滿意</label>
+              </div>
+              <div>
+                <input id="rating4" type="radio" name="satisfaction" value="滿意" />
+                <label for="rating4">滿意</label>
+              </div>
+              <div>
+                <input id="rating3" type="radio" name="satisfaction" value="普通" />
+                <label for="rating3">普通</label>
+              </div>
+              <div>
+                <input id="rating2" type="radio" name="satisfaction" value="不滿意" />
+                <label for="rating2">不滿意</label>
+              </div>
+              <div>
+                <input id="rating1" type="radio" name="satisfaction" value="非常不滿意" />
+                <label for="rating1">非常不滿意</label>
+              </div>
+            </div>
+          </fieldset>
+
+          <div class="field">
+            <label class="question" for="feedback">
+              2. 本次課程讓您印象最深刻的收穫，或對未來課程的建議
+              <span class="required">*</span>
+            </label>
+            <textarea
+              id="feedback"
+              name="feedback"
+              maxlength="1000"
+              placeholder="簡短分享一句話或幾個關鍵字即可"
+              required
+            ></textarea>
+            <div class="hint">不需要寫很多，留下最有感的一點即可。</div>
+          </div>
+
+          <input type="hidden" name="source" value="github-pages" />
+
+          <button id="submitBtn" class="submit-btn" type="submit">
+            送出課後回饋
+          </button>
+
+          <p class="privacy">填寫內容僅供本次課程回饋與統計使用。</p>
+
+          <div id="status" class="status" role="alert"></div>
+        </form>
+
+        <section id="successBox" class="success" aria-live="polite">
+          <div class="success-icon">✓</div>
+          <h2>感謝您的回饋！</h2>
+          <p>
+            您已完成本次課後問卷。<br />
+            課程大禮包將依活動安排提供紙本資料。
+          </p>
+        </section>
+
+        <iframe
+          id="submissionFrame"
+          name="submissionFrame"
+          title="表單送出結果"
+          style="display:none;"
+        ></iframe>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    /*
+      只需要修改下面兩個網址：
+      1. WEB_APP_URL：Apps Script 部署後，結尾為 /exec 的網址
+    */
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx6CxvCHMaq4ftTBfTcHh81HPOein9tIWqIVphnlVk9jh022p72D6guxebwift2s3eKrA/exec";
+
+    const form = document.getElementById("surveyForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const statusBox = document.getElementById("status");
+    const successBox = document.getElementById("successBox");
+
+    let submitTimer = null;
+    let isSubmitting = false;
+
+    function isValidWebAppUrl(url) {
+      return (
+        typeof url === "string" &&
+        url.startsWith("https://script.google.com/macros/s/") &&
+        url.endsWith("/exec")
+      );
+    }
+
+    function showError(message) {
+      isSubmitting = false;
+      clearTimeout(submitTimer);
+      submitBtn.disabled = false;
+      submitBtn.textContent = "重新送出回饋";
+      statusBox.className = "status error";
+      statusBox.textContent = message || "送出失敗，請稍後再試一次。";
+    }
+
+    function showSuccess() {
+      isSubmitting = false;
+      clearTimeout(submitTimer);
+      statusBox.className = "status";
+      statusBox.textContent = "";
+      form.style.display = "none";
+      successBox.classList.add("show");
+      successBox.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      if (!form.reportValidity()) {
+        return;
+      }
+
+      if (!isValidWebAppUrl(WEB_APP_URL)) {
+        showError("尚未設定 Apps Script 網址，請先修改 index.html 裡的 WEB_APP_URL。");
+        return;
+      }
+
+      form.action = WEB_APP_URL;
+      isSubmitting = true;
+      submitBtn.disabled = true;
+      submitBtn.textContent = "回饋送出中…";
+      statusBox.className = "status";
+      statusBox.textContent = "";
+
+      submitTimer = setTimeout(function () {
+        if (isSubmitting) {
+          showError("送出時間較久，請確認網路後再試一次。");
+        }
+      }, 15000);
+
+      // 使用隱藏 iframe 送出，可避免 GitHub Pages 跳離問卷頁面。
+      HTMLFormElement.prototype.submit.call(form);
+    });
+
+    window.addEventListener("message", function (event) {
+      const data = event.data;
+
+      if (!data || data.type !== "KPLUS_FORM_RESULT" || !isSubmitting) {
+        return;
+      }
+
+      if (data.ok) {
+        showSuccess();
+      } else {
+        showError(data.message || "送出失敗，請稍後再試一次。");
+      }
+    });
+
+  </script>
+</body>
+</html>
 
