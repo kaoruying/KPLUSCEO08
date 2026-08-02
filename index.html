@@ -300,12 +300,61 @@
       text-align: center;
     }
 
+    .status {
+      display: none;
+      margin-top: 18px;
+      padding: 13px 15px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.55;
+    }
 
+    .status.error {
+      display: block;
+      color: var(--danger);
+      background: #FFF1F0;
+      border: 1px solid #F7C8C4;
+    }
 
+    .success {
+      display: none;
+      margin-top: 30px;
+      padding: 26px;
+      border: 1px solid rgba(24, 121, 78, 0.22);
+      border-radius: 18px;
+      background: linear-gradient(145deg, #F0FFF8, #FFFFFF);
+      text-align: center;
+    }
 
+    .success.show {
+      display: block;
+      animation: rise 0.45s ease both;
+    }
 
+    .success-icon {
+      display: grid;
+      place-items: center;
+      width: 58px;
+      height: 58px;
+      margin: 0 auto 12px;
+      border-radius: 50%;
+      color: var(--white);
+      background: var(--success);
+      font-size: 30px;
+      font-weight: 900;
+    }
 
+    .success h2 {
+      margin: 0;
+      color: var(--success);
+      font-size: 25px;
+    }
 
+    .success p {
+      margin: 9px 0 18px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
 
     .gift-btn {
       display: inline-flex;
@@ -326,12 +375,58 @@
       font-size: 21px;
     }
 
+    .event-preview {
+      margin-top: 20px;
+      padding: 20px 18px;
+      border: 1px solid rgba(0, 42, 110, 0.16);
+      border-radius: 16px;
+      background: #FFFFFF;
+      text-align: left;
+    }
 
+    .event-label {
+      margin-bottom: 12px;
+      color: var(--orange);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+    }
 
+    .event-date {
+      color: var(--navy);
+      font-size: 17px;
+      font-weight: 900;
+    }
 
+    .event-speaker {
+      margin-top: 9px;
+      color: var(--ink);
+      font-size: 25px;
+      font-weight: 900;
+    }
 
+    .event-title {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+    }
 
+    .event-topic {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      color: var(--white);
+      background: var(--navy);
+      font-size: 14px;
+      font-weight: 900;
+    }
 
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
     @media (max-width: 680px) {
       body {
@@ -435,10 +530,9 @@
 
         <form
           id="surveyForm"
+          action="https://script.google.com/macros/s/AKfycbwObQuK_9Of_CSvWfiizhghcYyYs5Em_DHDB9ZVnCJfThQ3N6BO2gWscSQFuNl9WUpIiA/exec"
           method="POST"
-          target="submissionFrame"
           autocomplete="on"
-          novalidate
         >
           <div class="section-title">基本資料</div>
 
@@ -521,9 +615,13 @@
             送出課後回饋
           </button>
 
-          <p class="privacy">填寫內容僅供本次課程回饋與統計使用。</p>
-</form>
-</div>
+
+          <div id="status" class="status" role="alert"></div>
+        </form>
+
+
+
+      </div>
     </section>
   </main>
 
