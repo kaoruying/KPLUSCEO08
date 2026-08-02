@@ -5,235 +5,441 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#002A6E" />
   <title>K PLUS CEO講堂｜課後回饋</title>
+
   <style>
     :root {
-      --navy:#002A6E;
-      --blue:#005B88;
-      --orange:#F4510B;
-      --gold:#C99A3D;
-      --ink:#172033;
-      --muted:#667085;
-      --line:#DDE5F0;
-      --white:#FFFFFF;
-      --success:#18794E;
-      --danger:#B42318;
+      --navy: #002A6E;
+      --blue: #005B88;
+      --orange: #F4510B;
+      --gold: #C99A3D;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #DDE5F0;
+      --soft: #F3F7FC;
+      --white: #FFFFFF;
+      --success: #18794E;
+      --danger: #B42318;
+      --shadow: 0 20px 55px rgba(0, 42, 110, 0.14);
     }
-    * { box-sizing:border-box; }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
-      margin:0;
-      min-height:100vh;
-      padding:8px;
-      font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
-      color:var(--ink);
-      background:linear-gradient(180deg,#F7FAFE 0%,#EEF4FB 100%);
+      margin: 0;
+      min-height: 100vh;
+      font-family:
+        "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+        system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(0, 91, 136, 0.12), transparent 30%),
+        radial-gradient(circle at 95% 12%, rgba(244, 81, 11, 0.10), transparent 25%),
+        linear-gradient(180deg, #F7FAFE 0%, #EEF4FB 100%);
+      padding: 16px 10px 32px;
     }
-    .page { width:min(760px,100%); margin:0 auto; }
-    .card {
-      overflow:hidden;
-      background:rgba(255,255,255,.98);
-      border:1px solid rgba(0,42,110,.08);
-      border-radius:16px;
-      box-shadow:0 18px 48px rgba(0,42,110,.13);
+
+    .page {
+      width: min(760px, 100%);
+      margin: 0 auto;
     }
+
     .brand-bar {
-      height:7px;
-      background:linear-gradient(90deg,var(--navy) 0 58%,var(--orange) 58% 75%,var(--gold) 75%);
+      height: 7px;
+      border-radius: 999px 999px 0 0;
+      background: linear-gradient(90deg, var(--navy) 0 58%, var(--orange) 58% 75%, var(--gold) 75%);
     }
-    .content { padding:20px 16px 24px; }
+
+    .card {
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.97);
+      border: 1px solid rgba(0, 42, 110, 0.08);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .content {
+      padding: 28px 28px 32px;
+    }
+
     .brand {
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:14px;
-      margin-bottom:18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
     }
+
     .brand-name {
-      color:var(--navy);
-      font-family:Georgia,"Times New Roman",serif;
-      font-size:18px;
-      font-weight:800;
-      letter-spacing:.06em;
+      color: var(--navy);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
     }
-    .partner {
-      max-width:145px;
-      color:var(--muted);
-      font-size:11px;
-      font-weight:700;
-      line-height:1.4;
-      text-align:right;
+
+    .brand-partner {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      text-align: right;
     }
+
+
     h1 {
-      margin:0;
-      color:var(--navy);
-      font-size:28px;
-      line-height:1.25;
+      margin: 0;
+      color: var(--navy);
+      font-size: clamp(28px, 5vw, 42px);
+      line-height: 1.22;
+      letter-spacing: -0.02em;
     }
+
     .lead {
-      margin:10px 0 18px;
-      color:var(--muted);
-      font-size:15px;
-      line-height:1.65;
+      margin: 14px 0 20px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.75;
     }
-    .gift-note {
-      display:flex;
-      align-items:center;
-      gap:12px;
-      margin-bottom:22px;
-      padding:13px 15px;
-      border:1px solid rgba(201,154,61,.35);
-      border-radius:15px;
-      background:linear-gradient(135deg,#FFF9EC,#FFFFFF);
+
+    .gift-preview {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 0 0 28px;
+      padding: 16px 18px;
+      border: 1px solid rgba(201, 154, 61, 0.35);
+      border-radius: 16px;
+      background: linear-gradient(135deg, #FFF9EC 0%, #FFFFFF 100%);
     }
+
     .gift-icon {
-      display:grid;
-      place-items:center;
-      width:38px;
-      height:38px;
-      flex:0 0 auto;
-      border-radius:12px;
-      background:#FFF0C9;
-      font-size:21px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 13px;
+      background: #FFF0C9;
+      font-size: 24px;
     }
-    .gift-note strong {
-      color:#7A5714;
-      font-size:15px;
-      line-height:1.45;
+
+    .gift-preview strong {
+      display: block;
+      color: #7A5714;
+      font-size: 16px;
     }
+
+    .gift-preview span {
+      display: block;
+      margin-top: 3px;
+      color: #806A3A;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
     .section-title {
-      display:flex;
-      align-items:center;
-      gap:8px;
-      margin:24px 0 13px;
-      color:var(--navy);
-      font-size:17px;
-      font-weight:900;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 26px 0 14px;
+      color: var(--navy);
+      font-size: 17px;
+      font-weight: 900;
     }
+
     .section-title::before {
-      content:"";
-      width:5px;
-      height:20px;
-      border-radius:99px;
-      background:var(--orange);
+      content: "";
+      width: 5px;
+      height: 20px;
+      border-radius: 99px;
+      background: var(--orange);
     }
-    .field { margin-bottom:18px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+
+    label.question,
     .question {
-      display:block;
-      margin-bottom:9px;
-      color:var(--ink);
-      font-size:16px;
-      font-weight:800;
-      line-height:1.55;
+      display: block;
+      margin-bottom: 9px;
+      color: var(--ink);
+      font-size: 16px;
+      font-weight: 800;
+      line-height: 1.55;
     }
-    .required { margin-left:4px; color:var(--orange); }
-    input[type="text"], textarea {
-      width:100%;
-      border:1.5px solid var(--line);
-      border-radius:13px;
-      background:var(--white);
-      color:var(--ink);
-      font:inherit;
-      font-size:16px;
-      outline:none;
+
+    .required {
+      margin-left: 4px;
+      color: var(--orange);
     }
-    input[type="text"] {
-      height:56px;
-      padding:0 15px;
-    }
+
+    input[type="text"],
     textarea {
-      min-height:112px;
-      padding:14px 15px;
-      line-height:1.6;
-      resize:vertical;
+      width: 100%;
+      border: 1.5px solid var(--line);
+      border-radius: 13px;
+      background: var(--white);
+      color: var(--ink);
+      font: inherit;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
-    input:focus, textarea:focus {
-      border-color:var(--blue);
-      box-shadow:0 0 0 4px rgba(0,91,136,.10);
+
+    input[type="text"] {
+      height: 56px;
+      padding: 0 15px;
     }
-    fieldset { margin:0; padding:0; border:0; }
+
+    textarea {
+      min-height: 112px;
+      padding: 14px 15px;
+      line-height: 1.6;
+      resize: vertical;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(0, 91, 136, 0.10);
+    }
+
+
     .rating {
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:10px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 9px;
     }
-    .rating > div:last-child { grid-column:1/-1; }
+
     .rating input {
-      position:absolute;
-      opacity:0;
-      pointer-events:none;
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
     }
+
     .rating label {
-      display:grid;
-      place-items:center;
-      min-height:62px;
-      padding:10px 6px;
-      border:1.5px solid var(--line);
-      border-radius:13px;
-      background:var(--white);
-      color:#344054;
-      cursor:pointer;
-      touch-action:manipulation;
-      text-align:center;
-      font-size:15px;
-      font-weight:800;
+      display: grid;
+      place-items: center;
+      min-height: 70px;
+      padding: 10px 6px;
+      border: 1.5px solid var(--line);
+      border-radius: 13px;
+      background: var(--white);
+      color: #344054;
+      cursor: pointer;
+      touch-action: manipulation;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1.35;
+      transition: transform 0.18s, border-color 0.18s, background 0.18s, color 0.18s;
     }
+
+    .rating label:hover {
+      transform: translateY(-2px);
+      border-color: #A9BCD5;
+    }
+
+    .rating input:focus-visible + label {
+      outline: 3px solid rgba(0, 91, 136, 0.18);
+      outline-offset: 2px;
+    }
+
     .rating input:checked + label {
-      border-color:var(--navy);
-      background:var(--navy);
-      color:var(--white);
-      box-shadow:0 8px 18px rgba(0,42,110,.18);
+      border-color: var(--navy);
+      background: var(--navy);
+      color: var(--white);
+      box-shadow: 0 8px 18px rgba(0, 42, 110, 0.18);
     }
-    .submit-btn {
-      width:100%;
-      min-height:58px;
-      border:0;
-      border-radius:14px;
-      color:var(--white);
-      background:linear-gradient(110deg,var(--navy),var(--blue));
-      box-shadow:0 12px 25px rgba(0,42,110,.23);
-      cursor:pointer;
-      font:inherit;
-      font-size:17px;
-      font-weight:900;
+
+    .submit-btn,
+    .gift-btn {
+      width: 100%;
+      min-height: 56px;
+      border: 0;
+      border-radius: 14px;
+      color: var(--white);
+      background: linear-gradient(110deg, var(--navy), var(--blue));
+      box-shadow: 0 12px 25px rgba(0, 42, 110, 0.23);
+      cursor: pointer;
+      font: inherit;
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      transition: transform 0.18s, box-shadow 0.18s, opacity 0.18s;
     }
-    .submit-btn:disabled { opacity:.65; cursor:wait; }
+
+    .submit-btn:hover,
+    .gift-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 30px rgba(0, 42, 110, 0.28);
+    }
+
+    .submit-btn:disabled {
+      cursor: wait;
+      opacity: 0.65;
+      transform: none;
+    }
+
     .privacy {
-      margin:11px 0 0;
-      color:var(--muted);
-      font-size:12px;
-      text-align:center;
+      margin: 11px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
     }
-    @media (min-width:681px) {
-      body { padding:18px 10px 36px; }
-      .content { padding:28px 30px 34px; }
-      .brand-name { font-size:21px; }
-      .partner { max-width:none; font-size:13px; }
-      h1 { font-size:38px; }
-      .grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-      .rating { grid-template-columns:repeat(5,1fr); }
-      .rating > div:last-child { grid-column:auto; }
+
+
+
+
+
+
+
+
+    .gift-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      background: linear-gradient(110deg, #8D671B, var(--gold));
+    }
+
+
+    .compact-note {
+      padding: 13px 16px;
+    }
+
+    .compact-note .gift-icon {
+      width: 38px;
+      height: 38px;
+      font-size: 21px;
+    }
+
+
+
+
+
+
+
+
+    @media (max-width: 680px) {
+      body {
+        padding: 8px 8px 24px;
+      }
+
+      .page {
+        width: 100%;
+      }
+
+      .card {
+        border-radius: 16px;
+      }
+
+      .content {
+        padding: 20px 16px 24px;
+      }
+
+      .brand {
+        align-items: flex-start;
+        margin-bottom: 18px;
+      }
+
+      .brand-name {
+        font-size: 18px;
+      }
+
+      .brand-partner {
+        max-width: 145px;
+        font-size: 11px;
+        line-height: 1.4;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      .lead {
+        margin: 10px 0 16px;
+        font-size: 15px;
+        line-height: 1.65;
+      }
+
+      .gift-preview {
+        margin-bottom: 22px;
+        padding: 14px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      input[type="text"],
+      textarea {
+        font-size: 16px;
+      }
+
+      .rating {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .rating label {
+        min-height: 62px;
+        font-size: 15px;
+      }
+
+      .rating > div:last-child {
+        grid-column: 1 / -1;
+      }
+
+      .submit-btn {
+        min-height: 58px;
+        font-size: 17px;
+      }
     }
   </style>
 </head>
+
 <body>
   <main class="page">
     <section class="card">
       <div class="brand-bar"></div>
+
       <div class="content">
         <div class="brand">
           <div class="brand-name">K PLUS CEO講堂</div>
-          <div class="partner">凱基人壽 × 商周CEO學院</div>
+          <div class="brand-partner">凱基人壽 × 商周CEO學院</div>
         </div>
 
-        <h1>K PLUS CEO講堂｜課後回饋</h1>
+                <h1>K PLUS CEO講堂｜課後回饋</h1>
         <p class="lead">謝謝您參與今天的課程，請留下您的回饋。</p>
 
-        <div class="gift-note">
-          <div class="gift-icon">🎁</div>
-          <strong>完成問卷，日後即可獲得課程大禮包</strong>
+        <div class="gift-preview compact-note">
+          <div class="gift-icon" aria-hidden="true">🎁</div>
+          <div>
+            <strong>完成問卷，日後即可獲得課程大禮包</strong>
+          </div>
         </div>
 
-        <!-- 直接送到 Apps Script，不使用隱藏 iframe 或跨網域訊息 -->
-        <form id="surveyForm" action="https://script.google.com/macros/s/AKfycbwObQuK_9Of_CSvWfiizhghcYyYs5Em_DHDB9ZVnCJfThQ3N6BO2gWscSQFuNl9WUpIiA/exec" method="POST">
+        <form
+          id="surveyForm"
+          method="POST"
+          target="submissionFrame"
+          autocomplete="on"
+          novalidate
+        >
           <div class="section-title">基本資料</div>
 
           <div class="grid">
@@ -241,22 +447,32 @@
               <label class="question" for="office">
                 通訊處名稱<span class="required">*</span>
               </label>
-              <input id="office" name="office" type="text"
-                     placeholder="請輸入通訊處名稱" required />
+              <input
+                id="office"
+                name="office"
+                type="text"
+                placeholder="請輸入通訊處名稱"
+                required
+              />
             </div>
 
             <div class="field">
               <label class="question" for="respondentName">
                 姓名<span class="required">*</span>
               </label>
-              <input id="respondentName" name="name" type="text"
-                     placeholder="請輸入姓名" required />
+              <input
+                id="respondentName"
+                name="name"
+                type="text"
+                placeholder="請輸入姓名"
+                required
+              />
             </div>
           </div>
 
           <div class="section-title">課後回饋</div>
 
-          <fieldset class="field">
+          <fieldset class="field" style="border:0;padding:0;margin-left:0;margin-right:0;">
             <legend class="question">
               1. 您對本次「K PLUS CEO講堂」的整體滿意度為何？
               <span class="required">*</span>
@@ -264,8 +480,7 @@
 
             <div class="rating">
               <div>
-                <input id="rating5" type="radio" name="satisfaction"
-                       value="非常滿意" required />
+                <input id="rating5" type="radio" name="satisfaction" value="非常滿意" required />
                 <label for="rating5">非常滿意</label>
               </div>
               <div>
@@ -292,27 +507,37 @@
               2. 本次課程讓您印象最深刻的收穫，或對未來課程的建議
               <span class="required">*</span>
             </label>
-            <textarea id="feedback" name="feedback"
-                      placeholder="請輸入您的回饋" required></textarea>
+            <textarea
+              id="feedback"
+              name="feedback"
+              placeholder="請輸入您的回饋"
+              required
+            ></textarea>
           </div>
+
+          <input type="hidden" name="source" value="github-pages" />
 
           <button id="submitBtn" class="submit-btn" type="submit">
             送出課後回饋
           </button>
 
           <p class="privacy">填寫內容僅供本次課程回饋與統計使用。</p>
-        </form>
-      </div>
+</form>
+</div>
     </section>
   </main>
 
   <script>
     const form = document.getElementById("surveyForm");
-    const button = document.getElementById("submitBtn");
+    const submitBtn = document.getElementById("submitBtn");
 
     form.addEventListener("submit", function () {
-      button.disabled = true;
-      button.textContent = "回饋送出中…";
+      if (!form.reportValidity()) {
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "回饋送出中…";
     });
   </script>
 </body>
