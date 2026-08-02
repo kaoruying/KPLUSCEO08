@@ -41,7 +41,7 @@
         radial-gradient(circle at 10% 0%, rgba(0, 91, 136, 0.12), transparent 30%),
         radial-gradient(circle at 95% 12%, rgba(244, 81, 11, 0.10), transparent 25%),
         linear-gradient(180deg, #F7FAFE 0%, #EEF4FB 100%);
-      padding: 28px 14px 48px;
+      padding: 16px 10px 32px;
     }
 
     .page {
@@ -64,7 +64,7 @@
     }
 
     .content {
-      padding: 34px 38px 38px;
+      padding: 28px 28px 32px;
     }
 
     .brand {
@@ -90,18 +90,6 @@
       text-align: right;
     }
 
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 10px;
-      padding: 6px 12px;
-      border-radius: 999px;
-      color: var(--navy);
-      background: var(--soft);
-      font-size: 13px;
-      font-weight: 800;
-    }
 
     h1 {
       margin: 0;
@@ -211,7 +199,7 @@
     }
 
     input[type="text"] {
-      height: 52px;
+      height: 56px;
       padding: 0 15px;
     }
 
@@ -228,12 +216,6 @@
       box-shadow: 0 0 0 4px rgba(0, 91, 136, 0.10);
     }
 
-    .hint {
-      margin-top: 7px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.5;
-    }
 
     .rating {
       display: grid;
@@ -257,6 +239,7 @@
       background: var(--white);
       color: #344054;
       cursor: pointer;
+      touch-action: manipulation;
       text-align: center;
       font-size: 14px;
       font-weight: 800;
@@ -388,29 +371,49 @@
 
     @media (max-width: 680px) {
       body {
-        padding: 12px 10px 30px;
+        padding: 8px 8px 24px;
+      }
+
+      .page {
+        width: 100%;
       }
 
       .card {
-        border-radius: 18px;
+        border-radius: 16px;
       }
 
       .content {
-        padding: 25px 18px 28px;
+        padding: 20px 16px 24px;
       }
 
       .brand {
         align-items: flex-start;
+        margin-bottom: 18px;
       }
 
       .brand-name {
-        font-size: 19px;
+        font-size: 18px;
       }
 
       .brand-partner {
-        max-width: 150px;
+        max-width: 145px;
         font-size: 11px;
-        line-height: 1.45;
+        line-height: 1.4;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      .lead {
+        margin: 10px 0 16px;
+        font-size: 15px;
+        line-height: 1.65;
+      }
+
+      .gift-preview {
+        margin-bottom: 22px;
+        padding: 14px;
       }
 
       .grid {
@@ -418,16 +421,28 @@
         gap: 0;
       }
 
+      input[type="text"],
+      textarea {
+        font-size: 16px;
+      }
+
       .rating {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
       }
 
       .rating label {
-        min-height: 58px;
+        min-height: 62px;
+        font-size: 15px;
       }
 
       .rating > div:last-child {
         grid-column: 1 / -1;
+      }
+
+      .submit-btn {
+        min-height: 58px;
+        font-size: 17px;
       }
     }
   </style>
@@ -444,17 +459,14 @@
           <div class="brand-partner">凱基人壽 × 商周CEO學院</div>
         </div>
 
-        <div class="eyebrow">課後回饋｜約 30 秒完成</div>
-        <h1>謝謝您參與今天的課程</h1>
-        <p class="lead">
-          邀請您留下簡短回饋，協助我們持續規劃更貼近處經理需求的學習內容。
-        </p>
+                <h1>K PLUS CEO講堂｜課後回饋</h1>
+        <p class="lead">謝謝您參與今天的課程，請留下您的回饋。</p>
 
         <div class="gift-preview">
           <div class="gift-icon" aria-hidden="true">🎁</div>
           <div>
-            <strong>完成問卷，即可獲得課程紙本大禮包</strong>
-            <span>完成後將依活動安排提供紙本資料。</span>
+            <strong>完成問卷，日後即可獲得課程大禮包</strong>
+            <span>課程大禮包將於日後提供。</span>
           </div>
         </div>
 
@@ -476,7 +488,6 @@
                 id="office"
                 name="office"
                 type="text"
-                maxlength="80"
                 placeholder="請輸入通訊處名稱"
                 required
               />
@@ -490,7 +501,6 @@
                 id="respondentName"
                 name="name"
                 type="text"
-                maxlength="40"
                 placeholder="請輸入姓名"
                 required
               />
@@ -537,11 +547,9 @@
             <textarea
               id="feedback"
               name="feedback"
-              maxlength="1000"
-              placeholder="簡短分享一句話或幾個關鍵字即可"
+              placeholder="請輸入您的回饋"
               required
             ></textarea>
-            <div class="hint">不需要寫很多，留下最有感的一點即可。</div>
           </div>
 
           <input type="hidden" name="source" value="github-pages" />
@@ -560,7 +568,7 @@
           <h2>感謝您的回饋！</h2>
           <p>
             您已完成本次課後問卷。<br />
-            課程大禮包將依活動安排提供紙本資料。
+            課程大禮包將於日後提供。
           </p>
         </section>
 
@@ -662,4 +670,3 @@
   </script>
 </body>
 </html>
-
