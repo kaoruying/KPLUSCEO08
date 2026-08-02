@@ -15,7 +15,6 @@
       --ink: #172033;
       --muted: #667085;
       --line: #DDE5F0;
-      --soft: #F3F7FC;
       --white: #FFFFFF;
       --success: #18794E;
       --danger: #B42318;
@@ -33,6 +32,7 @@
     body {
       margin: 0;
       min-height: 100vh;
+      padding: 8px;
       font-family:
         "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
         system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -41,7 +41,6 @@
         radial-gradient(circle at 10% 0%, rgba(0, 91, 136, 0.12), transparent 30%),
         radial-gradient(circle at 95% 12%, rgba(244, 81, 11, 0.10), transparent 25%),
         linear-gradient(180deg, #F7FAFE 0%, #EEF4FB 100%);
-      padding: 16px 10px 32px;
     }
 
     .page {
@@ -49,104 +48,100 @@
       margin: 0 auto;
     }
 
-    .brand-bar {
-      height: 7px;
-      border-radius: 999px 999px 0 0;
-      background: linear-gradient(90deg, var(--navy) 0 58%, var(--orange) 58% 75%, var(--gold) 75%);
-    }
-
     .card {
       overflow: hidden;
-      background: rgba(255, 255, 255, 0.97);
+      background: rgba(255, 255, 255, 0.98);
       border: 1px solid rgba(0, 42, 110, 0.08);
-      border-radius: 24px;
+      border-radius: 16px;
       box-shadow: var(--shadow);
     }
 
+    .brand-bar {
+      height: 7px;
+      background: linear-gradient(
+        90deg,
+        var(--navy) 0 58%,
+        var(--orange) 58% 75%,
+        var(--gold) 75%
+      );
+    }
+
     .content {
-      padding: 28px 28px 32px;
+      padding: 20px 16px 24px;
     }
 
     .brand {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 24px;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 18px;
     }
 
     .brand-name {
       color: var(--navy);
       font-family: Georgia, "Times New Roman", serif;
-      font-size: 22px;
+      font-size: 18px;
       font-weight: 800;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.06em;
     }
 
     .brand-partner {
+      max-width: 145px;
       color: var(--muted);
-      font-size: 13px;
+      font-size: 11px;
       font-weight: 700;
+      line-height: 1.4;
       text-align: right;
     }
-
 
     h1 {
       margin: 0;
       color: var(--navy);
-      font-size: clamp(28px, 5vw, 42px);
-      line-height: 1.22;
-      letter-spacing: -0.02em;
+      font-size: 28px;
+      line-height: 1.25;
     }
 
     .lead {
-      margin: 14px 0 20px;
+      margin: 10px 0 18px;
       color: var(--muted);
-      font-size: 16px;
-      line-height: 1.75;
+      font-size: 15px;
+      line-height: 1.65;
     }
 
     .gift-preview {
       display: flex;
       align-items: center;
-      gap: 14px;
-      margin: 0 0 28px;
-      padding: 16px 18px;
+      gap: 12px;
+      margin-bottom: 22px;
+      padding: 13px 15px;
       border: 1px solid rgba(201, 154, 61, 0.35);
-      border-radius: 16px;
-      background: linear-gradient(135deg, #FFF9EC 0%, #FFFFFF 100%);
+      border-radius: 15px;
+      background: linear-gradient(135deg, #FFF9EC, #FFFFFF);
     }
 
     .gift-icon {
-      flex: 0 0 auto;
       display: grid;
       place-items: center;
-      width: 44px;
-      height: 44px;
-      border-radius: 13px;
+      width: 38px;
+      height: 38px;
+      flex: 0 0 auto;
+      border-radius: 12px;
       background: #FFF0C9;
-      font-size: 24px;
+      font-size: 21px;
     }
 
     .gift-preview strong {
-      display: block;
       color: #7A5714;
-      font-size: 16px;
-    }
-
-    .gift-preview span {
-      display: block;
-      margin-top: 3px;
-      color: #806A3A;
-      font-size: 13px;
-      line-height: 1.5;
+      font-size: 15px;
+      line-height: 1.45;
     }
 
     .section-title {
       display: flex;
       align-items: center;
-      gap: 9px;
-      margin: 26px 0 14px;
+      gap: 8px;
+      margin: 24px 0 13px;
       color: var(--navy);
       font-size: 17px;
       font-weight: 900;
@@ -160,17 +155,10 @@
       background: var(--orange);
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-
     .field {
       margin-bottom: 18px;
     }
 
-    label.question,
     .question {
       display: block;
       margin-bottom: 9px;
@@ -216,11 +204,20 @@
       box-shadow: 0 0 0 4px rgba(0, 91, 136, 0.10);
     }
 
+    fieldset {
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
 
     .rating {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 9px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .rating > div:last-child {
+      grid-column: 1 / -1;
     }
 
     .rating input {
@@ -232,7 +229,7 @@
     .rating label {
       display: grid;
       place-items: center;
-      min-height: 70px;
+      min-height: 62px;
       padding: 10px 6px;
       border: 1.5px solid var(--line);
       border-radius: 13px;
@@ -241,20 +238,9 @@
       cursor: pointer;
       touch-action: manipulation;
       text-align: center;
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 800;
       line-height: 1.35;
-      transition: transform 0.18s, border-color 0.18s, background 0.18s, color 0.18s;
-    }
-
-    .rating label:hover {
-      transform: translateY(-2px);
-      border-color: #A9BCD5;
-    }
-
-    .rating input:focus-visible + label {
-      outline: 3px solid rgba(0, 91, 136, 0.18);
-      outline-offset: 2px;
     }
 
     .rating input:checked + label {
@@ -264,10 +250,9 @@
       box-shadow: 0 8px 18px rgba(0, 42, 110, 0.18);
     }
 
-    .submit-btn,
-    .gift-btn {
+    .submit-btn {
       width: 100%;
-      min-height: 56px;
+      min-height: 58px;
       border: 0;
       border-radius: 14px;
       color: var(--white);
@@ -277,20 +262,11 @@
       font: inherit;
       font-size: 17px;
       font-weight: 900;
-      letter-spacing: 0.02em;
-      transition: transform 0.18s, box-shadow 0.18s, opacity 0.18s;
-    }
-
-    .submit-btn:hover,
-    .gift-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 16px 30px rgba(0, 42, 110, 0.28);
     }
 
     .submit-btn:disabled {
       cursor: wait;
       opacity: 0.65;
-      transform: none;
     }
 
     .privacy {
@@ -302,7 +278,7 @@
 
     .status {
       display: none;
-      margin-top: 18px;
+      margin-top: 16px;
       padding: 13px 15px;
       border-radius: 12px;
       font-size: 14px;
@@ -318,8 +294,7 @@
 
     .success {
       display: none;
-      margin-top: 30px;
-      padding: 26px;
+      padding: 28px 18px;
       border: 1px solid rgba(24, 121, 78, 0.22);
       border-radius: 18px;
       background: linear-gradient(145deg, #F0FFF8, #FFFFFF);
@@ -328,180 +303,117 @@
 
     .success.show {
       display: block;
-      animation: rise 0.45s ease both;
+      animation: rise 0.4s ease both;
     }
 
     .success-icon {
       display: grid;
       place-items: center;
-      width: 58px;
-      height: 58px;
-      margin: 0 auto 12px;
+      width: 62px;
+      height: 62px;
+      margin: 0 auto 14px;
       border-radius: 50%;
       color: var(--white);
       background: var(--success);
-      font-size: 30px;
+      font-size: 38px;
       font-weight: 900;
     }
 
     .success h2 {
       margin: 0;
       color: var(--success);
-      font-size: 25px;
+      font-size: 29px;
     }
 
-    .success p {
-      margin: 9px 0 18px;
-      color: var(--muted);
-      line-height: 1.65;
-    }
-
-    .gift-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      background: linear-gradient(110deg, #8D671B, var(--gold));
-    }
-
-
-    .compact-note {
-      padding: 13px 16px;
-    }
-
-    .compact-note .gift-icon {
-      width: 38px;
-      height: 38px;
-      font-size: 21px;
-    }
-
-    .event-preview {
-      margin-top: 20px;
-      padding: 20px 18px;
-      border: 1px solid rgba(0, 42, 110, 0.16);
-      border-radius: 16px;
-      background: #FFFFFF;
-      text-align: left;
+    .event-inline {
+      margin-top: 18px;
+      text-align: center;
     }
 
     .event-label {
-      margin-bottom: 12px;
       color: var(--orange);
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 900;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.05em;
     }
 
     .event-date {
+      margin-top: 11px;
       color: var(--navy);
-      font-size: 17px;
+      font-size: 19px;
       font-weight: 900;
     }
 
     .event-speaker {
-      margin-top: 9px;
+      margin-top: 10px;
       color: var(--ink);
-      font-size: 25px;
+      font-size: 29px;
       font-weight: 900;
     }
 
     .event-title {
-      margin-top: 3px;
+      margin-top: 4px;
       color: var(--muted);
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 700;
     }
 
     .event-topic {
       display: inline-block;
-      margin-top: 12px;
-      padding: 7px 12px;
+      margin-top: 13px;
+      padding: 8px 14px;
       border-radius: 999px;
       color: var(--white);
       background: var(--navy);
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 900;
     }
 
     @keyframes rise {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
-    @media (max-width: 680px) {
+    @media (min-width: 681px) {
       body {
-        padding: 8px 8px 24px;
-      }
-
-      .page {
-        width: 100%;
-      }
-
-      .card {
-        border-radius: 16px;
+        padding: 18px 10px 36px;
       }
 
       .content {
-        padding: 20px 16px 24px;
-      }
-
-      .brand {
-        align-items: flex-start;
-        margin-bottom: 18px;
+        padding: 28px 30px 34px;
       }
 
       .brand-name {
-        font-size: 18px;
+        font-size: 21px;
       }
 
       .brand-partner {
-        max-width: 145px;
-        font-size: 11px;
-        line-height: 1.4;
+        max-width: none;
+        font-size: 13px;
       }
 
       h1 {
-        font-size: 28px;
-      }
-
-      .lead {
-        margin: 10px 0 16px;
-        font-size: 15px;
-        line-height: 1.65;
-      }
-
-      .gift-preview {
-        margin-bottom: 22px;
-        padding: 14px;
+        font-size: 38px;
       }
 
       .grid {
-        grid-template-columns: 1fr;
-        gap: 0;
-      }
-
-      input[type="text"],
-      textarea {
-        font-size: 16px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
       }
 
       .rating {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 10px;
-      }
-
-      .rating label {
-        min-height: 62px;
-        font-size: 15px;
+        grid-template-columns: repeat(5, 1fr);
       }
 
       .rating > div:last-child {
-        grid-column: 1 / -1;
-      }
-
-      .submit-btn {
-        min-height: 58px;
-        font-size: 17px;
+        grid-column: auto;
       }
     }
   </style>
@@ -518,124 +430,254 @@
           <div class="brand-partner">凱基人壽 × 商周CEO學院</div>
         </div>
 
-                <h1>K PLUS CEO講堂｜課後回饋</h1>
-        <p class="lead">謝謝您參與今天的課程，請留下您的回饋。</p>
+        <div id="formPanel">
+          <h1>K PLUS CEO講堂｜課後回饋</h1>
+          <p class="lead">謝謝您參與今天的課程，請留下您的回饋。</p>
 
-        <div class="gift-preview compact-note">
-          <div class="gift-icon" aria-hidden="true">🎁</div>
-          <div>
+          <div class="gift-preview">
+            <div class="gift-icon" aria-hidden="true">🎁</div>
             <strong>完成問卷，日後即可獲得課程大禮包</strong>
           </div>
+
+          <form
+            id="surveyForm"
+            action="https://script.google.com/macros/s/AKfycbwObQuK_9Of_CSvWfiizhghcYyYs5Em_DHDB9ZVnCJfThQ3N6BO2gWscSQFuNl9WUpIiA/exec"
+            method="POST"
+            target="submissionFrame"
+            autocomplete="on"
+          >
+            <input id="requestId" type="hidden" name="requestId" value="" />
+
+            <div class="section-title">基本資料</div>
+
+            <div class="grid">
+              <div class="field">
+                <label class="question" for="office">
+                  通訊處名稱<span class="required">*</span>
+                </label>
+                <input
+                  id="office"
+                  name="office"
+                  type="text"
+                  placeholder="請輸入通訊處名稱"
+                  required
+                />
+              </div>
+
+              <div class="field">
+                <label class="question" for="respondentName">
+                  姓名<span class="required">*</span>
+                </label>
+                <input
+                  id="respondentName"
+                  name="name"
+                  type="text"
+                  placeholder="請輸入姓名"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="section-title">課後回饋</div>
+
+            <fieldset class="field">
+              <legend class="question">
+                1. 您對本次「K PLUS CEO講堂」的整體滿意度為何？
+                <span class="required">*</span>
+              </legend>
+
+              <div class="rating">
+                <div>
+                  <input
+                    id="rating5"
+                    type="radio"
+                    name="satisfaction"
+                    value="非常滿意"
+                    required
+                  />
+                  <label for="rating5">非常滿意</label>
+                </div>
+
+                <div>
+                  <input
+                    id="rating4"
+                    type="radio"
+                    name="satisfaction"
+                    value="滿意"
+                  />
+                  <label for="rating4">滿意</label>
+                </div>
+
+                <div>
+                  <input
+                    id="rating3"
+                    type="radio"
+                    name="satisfaction"
+                    value="普通"
+                  />
+                  <label for="rating3">普通</label>
+                </div>
+
+                <div>
+                  <input
+                    id="rating2"
+                    type="radio"
+                    name="satisfaction"
+                    value="不滿意"
+                  />
+                  <label for="rating2">不滿意</label>
+                </div>
+
+                <div>
+                  <input
+                    id="rating1"
+                    type="radio"
+                    name="satisfaction"
+                    value="非常不滿意"
+                  />
+                  <label for="rating1">非常不滿意</label>
+                </div>
+              </div>
+            </fieldset>
+
+            <div class="field">
+              <label class="question" for="feedback">
+                2. 本次課程讓您印象最深刻的收穫，或對未來課程的建議
+                <span class="required">*</span>
+              </label>
+
+              <textarea
+                id="feedback"
+                name="feedback"
+                placeholder="請輸入您的回饋"
+                required
+              ></textarea>
+            </div>
+
+            <button id="submitBtn" class="submit-btn" type="submit">
+              送出課後回饋
+            </button>
+
+            <p class="privacy">填寫內容僅供本次課程回饋與統計使用。</p>
+
+            <div id="status" class="status" role="alert"></div>
+          </form>
         </div>
 
-        <form
-          id="surveyForm"
-          action="https://script.google.com/macros/s/AKfycbwObQuK_9Of_CSvWfiizhghcYyYs5Em_DHDB9ZVnCJfThQ3N6BO2gWscSQFuNl9WUpIiA/exec"
-          method="POST"
-          autocomplete="on"
-        >
-          <div class="section-title">基本資料</div>
+        <section id="successPanel" class="success" aria-live="polite">
+          <div class="success-icon">✓</div>
+          <h2>感謝您的回饋！</h2>
 
-          <div class="grid">
-            <div class="field">
-              <label class="question" for="office">
-                通訊處名稱<span class="required">*</span>
-              </label>
-              <input
-                id="office"
-                name="office"
-                type="text"
-                placeholder="請輸入通訊處名稱"
-                required
-              />
-            </div>
-
-            <div class="field">
-              <label class="question" for="respondentName">
-                姓名<span class="required">*</span>
-              </label>
-              <input
-                id="respondentName"
-                name="name"
-                type="text"
-                placeholder="請輸入姓名"
-                required
-              />
-            </div>
+          <div class="event-inline">
+            <div class="event-label">下一場活動預告</div>
+            <div class="event-date">11／10　台北場</div>
+            <div class="event-speaker">陳慧蓉</div>
+            <div class="event-title">前台灣微軟首席營運長</div>
+            <div class="event-topic">教練引導力</div>
           </div>
+        </section>
 
-          <div class="section-title">課後回饋</div>
-
-          <fieldset class="field" style="border:0;padding:0;margin-left:0;margin-right:0;">
-            <legend class="question">
-              1. 您對本次「K PLUS CEO講堂」的整體滿意度為何？
-              <span class="required">*</span>
-            </legend>
-
-            <div class="rating">
-              <div>
-                <input id="rating5" type="radio" name="satisfaction" value="非常滿意" required />
-                <label for="rating5">非常滿意</label>
-              </div>
-              <div>
-                <input id="rating4" type="radio" name="satisfaction" value="滿意" />
-                <label for="rating4">滿意</label>
-              </div>
-              <div>
-                <input id="rating3" type="radio" name="satisfaction" value="普通" />
-                <label for="rating3">普通</label>
-              </div>
-              <div>
-                <input id="rating2" type="radio" name="satisfaction" value="不滿意" />
-                <label for="rating2">不滿意</label>
-              </div>
-              <div>
-                <input id="rating1" type="radio" name="satisfaction" value="非常不滿意" />
-                <label for="rating1">非常不滿意</label>
-              </div>
-            </div>
-          </fieldset>
-
-          <div class="field">
-            <label class="question" for="feedback">
-              2. 本次課程讓您印象最深刻的收穫，或對未來課程的建議
-              <span class="required">*</span>
-            </label>
-            <textarea
-              id="feedback"
-              name="feedback"
-              placeholder="請輸入您的回饋"
-              required
-            ></textarea>
-          </div>
-
-          <input type="hidden" name="source" value="github-pages" />
-
-          <button id="submitBtn" class="submit-btn" type="submit">
-            送出課後回饋
-          </button>
-
-
-          <div id="status" class="status" role="alert"></div>
-        </form>
-
-
-
+        <iframe
+          id="submissionFrame"
+          name="submissionFrame"
+          title="問卷送出結果"
+          hidden
+        ></iframe>
       </div>
     </section>
   </main>
 
   <script>
     const form = document.getElementById("surveyForm");
+    const formPanel = document.getElementById("formPanel");
+    const successPanel = document.getElementById("successPanel");
     const submitBtn = document.getElementById("submitBtn");
+    const statusBox = document.getElementById("status");
+    const requestIdInput = document.getElementById("requestId");
 
-    form.addEventListener("submit", function () {
+    let isSubmitting = false;
+    let currentRequestId = "";
+    let timeoutId = null;
+
+    function createRequestId() {
+      if (window.crypto && typeof window.crypto.randomUUID === "function") {
+        return window.crypto.randomUUID();
+      }
+
+      return (
+        Date.now().toString(36) +
+        "-" +
+        Math.random().toString(36).slice(2)
+      );
+    }
+
+    function resetSubmittingState() {
+      isSubmitting = false;
+      clearTimeout(timeoutId);
+      submitBtn.disabled = false;
+      submitBtn.textContent = "送出課後回饋";
+    }
+
+    function showError(message) {
+      resetSubmittingState();
+      statusBox.className = "status error";
+      statusBox.textContent =
+        message || "資料尚未成功送出，請稍後再試一次。";
+    }
+
+    function showSuccess() {
+      isSubmitting = false;
+      clearTimeout(timeoutId);
+      formPanel.style.display = "none";
+      successPanel.classList.add("show");
+      successPanel.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+
       if (!form.reportValidity()) {
         return;
       }
 
+      currentRequestId = createRequestId();
+      requestIdInput.value = currentRequestId;
+
+      isSubmitting = true;
+      statusBox.className = "status";
+      statusBox.textContent = "";
       submitBtn.disabled = true;
       submitBtn.textContent = "回饋送出中…";
+
+      timeoutId = window.setTimeout(function () {
+        if (isSubmitting) {
+          showError("送出時間較久，請確認網路後再試一次。");
+        }
+      }, 30000);
+
+      HTMLFormElement.prototype.submit.call(form);
+    });
+
+    window.addEventListener("message", function (event) {
+      const data = event.data;
+
+      if (
+        !isSubmitting ||
+        !data ||
+        data.type !== "KPLUS_SURVEY_RESULT" ||
+        data.requestId !== currentRequestId
+      ) {
+        return;
+      }
+
+      if (data.ok === true) {
+        showSuccess();
+      } else {
+        showError(data.message || "資料尚未成功送出。");
+      }
     });
   </script>
 </body>
