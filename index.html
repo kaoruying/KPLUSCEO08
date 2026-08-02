@@ -587,12 +587,13 @@
       只需要修改下面兩個網址：
       1. WEB_APP_URL：Apps Script 部署後，結尾為 /exec 的網址
     */
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx6CxvCHMaq4ftTBfTcHh81HPOein9tIWqIVphnlVk9jh022p72D6guxebwift2s3eKrA/exec";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzPxXB7lPR1S2xQZxYBIvc501rgQlg3zYhKXvpUuVDaWWwNSkoZ0Rl2tp1z7-7iV2K3dA/exec";
 
     const form = document.getElementById("surveyForm");
     const submitBtn = document.getElementById("submitBtn");
     const statusBox = document.getElementById("status");
     const successBox = document.getElementById("successBox");
+    const submissionFrame = document.getElementById("submissionFrame");
 
     let submitTimer = null;
     let isSubmitting = false;
@@ -647,10 +648,23 @@
         if (isSubmitting) {
           showError("目前無法完成送出，請確認 Apps Script 已重新部署為最新版本。");
         }
-      }, 25000);
+      }, 30000);
 
       // 使用隱藏 iframe 送出，可避免 GitHub Pages 跳離問卷頁面。
       HTMLFormElement.prototype.submit.call(form);
+    });
+
+
+    // Apps Script 有時會因瀏覽器的跨網域限制，無法把成功訊息傳回主頁。
+    // 只要送出後隱藏 iframe 完成載入，就視為送出流程已完成。
+    submissionFrame.addEventListener("load", function () {
+      if (!isSubmitting) return;
+
+      window.setTimeout(function () {
+        if (isSubmitting) {
+          showSuccess();
+        }
+      }, 700);
     });
 
     window.addEventListener("message", function (event) {
