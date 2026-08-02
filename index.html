@@ -645,9 +645,9 @@
 
       submitTimer = setTimeout(function () {
         if (isSubmitting) {
-          showError("送出時間較久，請確認網路後再試一次。");
+          showError("目前無法完成送出，請確認 Apps Script 已重新部署為最新版本。");
         }
-      }, 15000);
+      }, 25000);
 
       // 使用隱藏 iframe 送出，可避免 GitHub Pages 跳離問卷頁面。
       HTMLFormElement.prototype.submit.call(form);
