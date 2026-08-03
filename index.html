@@ -216,8 +216,12 @@
       gap: 10px;
     }
 
-    .rating > div:last-child {
+    .rating > div:first-child {
       grid-column: 1 / -1;
+    }
+
+    .rating > div:last-child {
+      grid-column: auto;
     }
 
     .rating input {
@@ -409,9 +413,10 @@
       }
 
       .rating {
-        grid-template-columns: repeat(5, 1fr);
+        grid-template-columns: 1.35fr repeat(4, 1fr);
       }
 
+      .rating > div:first-child,
       .rating > div:last-child {
         grid-column: auto;
       }
@@ -441,7 +446,7 @@
 
           <form
             id="surveyForm"
-            action="https://script.google.com/macros/s/AKfycbyYTewC68-BNONtDSvVn1h00I6FU4yl3I9f4P08MGqmRkJRME8o2CdDFlF8Yte3tGOVnw/exec"
+            action="https://script.google.com/macros/s/AKfycbwObQuK_9Of_CSvWfiizhghcYyYs5Em_DHDB9ZVnCJfThQ3N6BO2gWscSQFuNl9WUpIiA/exec"
             method="POST"
             target="submissionFrame"
             autocomplete="on"
