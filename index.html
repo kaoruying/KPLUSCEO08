@@ -254,6 +254,22 @@
       box-shadow: 0 8px 18px rgba(0, 42, 110, 0.18);
     }
 
+    .followup-field {
+      margin-top: 14px;
+      padding: 16px;
+      border: 1.5px solid rgba(244, 81, 11, 0.28);
+      border-radius: 14px;
+      background: #FFF8F4;
+    }
+
+    .followup-field[hidden] {
+      display: none;
+    }
+
+    .followup-field .question {
+      color: #8C3510;
+    }
+
     .submit-btn {
       width: 100%;
       min-height: 58px;
@@ -446,7 +462,7 @@
 
           <form
             id="surveyForm"
-            action="https://script.google.com/macros/s/AKfycbzruY732e51mKimcAwcs1k0T7G2XzgiKpG0JxSA08wmaEjfUsEEF-BFN8afDpbDwKUwng/exec"
+            action="https://script.google.com/macros/s/AKfycbz7VnQeNlxh3i866bn32kOM2Lptd8Tm4YOx3QZ3KiR1MCyXjdtim7b7f9KOGcgO5I8ssg/exec"
             method="POST"
             target="submissionFrame"
             autocomplete="on"
@@ -545,6 +561,23 @@
               </div>
             </fieldset>
 
+            <div
+              id="dissatisfactionReasonField"
+              class="field followup-field"
+              hidden
+            >
+              <label class="question" for="dissatisfactionReason">
+                想請問您非常不滿意的主要原因是什麼？
+                <span class="required">*</span>
+              </label>
+
+              <textarea
+                id="dissatisfactionReason"
+                name="dissatisfactionReason"
+                placeholder="請輸入原因"
+              ></textarea>
+            </div>
+
             <div class="field">
               <label class="question" for="feedback">
                 2. 本次課程讓您印象最深刻的收穫，或對未來課程的建議
@@ -593,7 +626,7 @@
   </main>
 
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzruY732e51mKimcAwcs1k0T7G2XzgiKpG0JxSA08wmaEjfUsEEF-BFN8afDpbDwKUwng/exec";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz7VnQeNlxh3i866bn32kOM2Lptd8Tm4YOx3QZ3KiR1MCyXjdtim7b7f9KOGcgO5I8ssg/exec";
 
     const form = document.getElementById("surveyForm");
     const formPanel = document.getElementById("formPanel");
@@ -601,12 +634,53 @@
     const submitBtn = document.getElementById("submitBtn");
     const statusBox = document.getElementById("status");
     const requestIdInput = document.getElementById("requestId");
+    const dissatisfactionReasonField =
+      document.getElementById("dissatisfactionReasonField");
+    const dissatisfactionReason =
+      document.getElementById("dissatisfactionReason");
+    const satisfactionInputs =
+      document.querySelectorAll('input[name="satisfaction"]');
 
     let isSubmitting = false;
     let currentRequestId = "";
     let pollTimer = null;
     let timeoutTimer = null;
     let pollCount = 0;
+
+    function updateDissatisfactionReasonField() {
+      const selected = document.querySelector(
+        'input[name="satisfaction"]:checked'
+      );
+
+      const shouldShow =
+        selected && selected.value === "非常不滿意";
+
+      dissatisfactionReasonField.hidden = !shouldShow;
+      dissatisfactionReason.required = Boolean(shouldShow);
+
+      if (!shouldShow) {
+        dissatisfactionReason.value = "";
+      }
+    }
+
+    satisfactionInputs.forEach(function (input) {
+      input.addEventListener("change", function () {
+        const wasHidden = dissatisfactionReasonField.hidden;
+        updateDissatisfactionReasonField();
+
+        if (wasHidden && !dissatisfactionReasonField.hidden) {
+          window.setTimeout(function () {
+            dissatisfactionReasonField.scrollIntoView({
+              behavior: "smooth",
+              block: "center"
+            });
+            dissatisfactionReason.focus();
+          }, 120);
+        }
+      });
+    });
+
+    updateDissatisfactionReasonField();
 
     function createRequestId() {
       if (window.crypto && typeof window.crypto.randomUUID === "function") {
