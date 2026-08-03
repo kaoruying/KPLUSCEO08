@@ -446,7 +446,7 @@
 
           <form
             id="surveyForm"
-            action="https://script.google.com/macros/s/AKfycbwObQuK_9Of_CSvWfiizhghcYyYs5Em_DHDB9ZVnCJfThQ3N6BO2gWscSQFuNl9WUpIiA/exec"
+            action="https://script.google.com/macros/s/AKfycbzruY732e51mKimcAwcs1k0T7G2XzgiKpG0JxSA08wmaEjfUsEEF-BFN8afDpbDwKUwng/exec"
             method="POST"
             target="submissionFrame"
             autocomplete="on"
@@ -593,6 +593,8 @@
   </main>
 
   <script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzruY732e51mKimcAwcs1k0T7G2XzgiKpG0JxSA08wmaEjfUsEEF-BFN8afDpbDwKUwng/exec";
+
     const form = document.getElementById("surveyForm");
     const formPanel = document.getElementById("formPanel");
     const successPanel = document.getElementById("successPanel");
@@ -602,23 +604,26 @@
 
     let isSubmitting = false;
     let currentRequestId = "";
-    let timeoutId = null;
+    let pollTimer = null;
+    let timeoutTimer = null;
+    let pollCount = 0;
 
     function createRequestId() {
       if (window.crypto && typeof window.crypto.randomUUID === "function") {
         return window.crypto.randomUUID();
       }
 
-      return (
-        Date.now().toString(36) +
-        "-" +
-        Math.random().toString(36).slice(2)
-      );
+      return Date.now().toString(36) + "-" + Math.random().toString(36).slice(2);
+    }
+
+    function clearTimers() {
+      window.clearTimeout(pollTimer);
+      window.clearTimeout(timeoutTimer);
     }
 
     function resetSubmittingState() {
       isSubmitting = false;
-      clearTimeout(timeoutId);
+      clearTimers();
       submitBtn.disabled = false;
       submitBtn.textContent = "送出課後回饋";
     }
@@ -632,7 +637,7 @@
 
     function showSuccess() {
       isSubmitting = false;
-      clearTimeout(timeoutId);
+      clearTimers();
       formPanel.style.display = "none";
       successPanel.classList.add("show");
       successPanel.scrollIntoView({
@@ -641,15 +646,74 @@
       });
     }
 
+    function scheduleNextPoll() {
+      if (!isSubmitting) return;
+
+      pollTimer = window.setTimeout(function () {
+        checkSubmissionStatus();
+      }, 700);
+    }
+
+    function checkSubmissionStatus() {
+      if (!isSubmitting || !currentRequestId) return;
+
+      pollCount += 1;
+
+      const callbackName = "__kplusStatusCallback";
+      const oldScript = document.getElementById("kplusStatusScript");
+      if (oldScript) oldScript.remove();
+
+      window[callbackName] = function (data) {
+        const script = document.getElementById("kplusStatusScript");
+        if (script) script.remove();
+
+        if (!isSubmitting || !data) return;
+
+        if (data.requestId !== currentRequestId) {
+          scheduleNextPoll();
+          return;
+        }
+
+        if (data.status === "success") {
+          showSuccess();
+          return;
+        }
+
+        if (data.status === "error") {
+          showError(data.message || "資料寫入失敗，請重新送出。");
+          return;
+        }
+
+        scheduleNextPoll();
+      };
+
+      const script = document.createElement("script");
+      script.id = "kplusStatusScript";
+      script.src =
+        WEB_APP_URL +
+        "?mode=status" +
+        "&requestId=" + encodeURIComponent(currentRequestId) +
+        "&callback=" + encodeURIComponent(callbackName) +
+        "&_=" + Date.now();
+
+      script.onerror = function () {
+        script.remove();
+        scheduleNextPoll();
+      };
+
+      document.body.appendChild(script);
+    }
+
     form.addEventListener("submit", function (event) {
       event.preventDefault();
 
-      if (!form.reportValidity()) {
+      if (!form.reportValidity() || isSubmitting) {
         return;
       }
 
       currentRequestId = createRequestId();
       requestIdInput.value = currentRequestId;
+      pollCount = 0;
 
       isSubmitting = true;
       statusBox.className = "status";
@@ -657,32 +721,14 @@
       submitBtn.disabled = true;
       submitBtn.textContent = "回饋送出中…";
 
-      timeoutId = window.setTimeout(function () {
+      timeoutTimer = window.setTimeout(function () {
         if (isSubmitting) {
-          showError("送出時間較久，請確認網路後再試一次。");
+          showError("資料已送出，但確認時間較久，請重新整理後查看。");
         }
       }, 30000);
 
       HTMLFormElement.prototype.submit.call(form);
-    });
-
-    window.addEventListener("message", function (event) {
-      const data = event.data;
-
-      if (
-        !isSubmitting ||
-        !data ||
-        data.type !== "KPLUS_SURVEY_RESULT" ||
-        data.requestId !== currentRequestId
-      ) {
-        return;
-      }
-
-      if (data.ok === true) {
-        showSuccess();
-      } else {
-        showError(data.message || "資料尚未成功送出。");
-      }
+      scheduleNextPoll();
     });
   </script>
 </body>
