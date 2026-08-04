@@ -174,6 +174,7 @@
     }
 
     input[type="text"],
+    select,
     textarea {
       width: 100%;
       border: 1.5px solid var(--line);
@@ -186,9 +187,21 @@
       transition: border-color 0.2s, box-shadow 0.2s;
     }
 
-    input[type="text"] {
+    input[type="text"],
+    select {
       height: 56px;
       padding: 0 15px;
+    }
+
+    select {
+      color: var(--ink);
+      background-color: var(--white);
+    }
+
+    select:disabled {
+      color: #98A2B3;
+      background-color: #F2F4F7;
+      cursor: not-allowed;
     }
 
     textarea {
@@ -199,6 +212,7 @@
     }
 
     input[type="text"]:focus,
+    select:focus,
     textarea:focus {
       border-color: var(--blue);
       box-shadow: 0 0 0 4px rgba(0, 91, 136, 0.10);
@@ -462,7 +476,7 @@
 
           <form
             id="surveyForm"
-            action="https://script.google.com/macros/s/AKfycbz7VnQeNlxh3i866bn32kOM2Lptd8Tm4YOx3QZ3KiR1MCyXjdtim7b7f9KOGcgO5I8ssg/exec"
+            action="https://script.google.com/macros/s/AKfycby5rvWTHTb_kizJ16_78IrGrZkFbL_VyeYTq30ZMCg3F2O2G6o-ap1oGle6XmU6pm5XkA/exec"
             method="POST"
             target="submissionFrame"
             autocomplete="on"
@@ -473,29 +487,36 @@
 
             <div class="grid">
               <div class="field">
-                <label class="question" for="office">
-                  通訊處名稱<span class="required">*</span>
+                <label class="question" for="regionCenter">
+                  區域中心<span class="required">*</span>
                 </label>
-                <input
-                  id="office"
-                  name="office"
-                  type="text"
-                  placeholder="請輸入通訊處名稱"
+                <select
+                  id="regionCenter"
+                  name="regionCenter"
                   required
-                />
+                >
+                  <option value="">請選擇區域中心</option>
+                  <option value="北一">北一</option>
+                  <option value="北二">北二</option>
+                  <option value="桃竹">桃竹</option>
+                  <option value="中嘉">中嘉</option>
+                  <option value="台南">台南</option>
+                  <option value="高屏">高屏</option>
+                </select>
               </div>
 
               <div class="field">
-                <label class="question" for="respondentName">
-                  姓名<span class="required">*</span>
+                <label class="question" for="unitManager">
+                  單位｜姓名<span class="required">*</span>
                 </label>
-                <input
-                  id="respondentName"
-                  name="name"
-                  type="text"
-                  placeholder="請輸入姓名"
+                <select
+                  id="unitManager"
+                  name="unitManager"
                   required
-                />
+                  disabled
+                >
+                  <option value="">請先選擇區域中心</option>
+                </select>
               </div>
             </div>
 
@@ -566,8 +587,12 @@
               class="field followup-field"
               hidden
             >
-              <label class="question" for="dissatisfactionReason">
-                很抱歉，讓您感受不佳，想請問您非常不滿意的主要原因是什麼？
+              <label
+                id="dissatisfactionReasonLabel"
+                class="question"
+                for="dissatisfactionReason"
+              >
+                很抱歉讓您有不好的感受，想請問您不滿意的主要原因是什麼？
                 <span class="required">*</span>
               </label>
 
@@ -626,7 +651,153 @@
   </main>
 
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz7VnQeNlxh3i866bn32kOM2Lptd8Tm4YOx3QZ3KiR1MCyXjdtim7b7f9KOGcgO5I8ssg/exec";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby5rvWTHTb_kizJ16_78IrGrZkFbL_VyeYTq30ZMCg3F2O2G6o-ap1oGle6XmU6pm5XkA/exec";
+
+    const REGION_MANAGERS = {
+  "北一": [
+    "大衛｜翁文昌",
+    "民生｜詹美惠",
+    "汎德｜謝志湖",
+    "宏運｜郭家卉",
+    "奇異｜林俊宜",
+    "承暘｜鄭景杰",
+    "昇晴｜沈慕晴",
+    "昊昱｜林靜香",
+    "金典｜陳聰銘",
+    "金彥｜鄧睿宸",
+    "金昱｜孫元慶",
+    "非凡｜曾淑珍",
+    "昭才｜張悅平",
+    "泉泰｜潘則芳",
+    "恩典｜林麗華",
+    "創建｜譚淑鋆",
+    "越鋒｜林采娥",
+    "毅品｜張雅如",
+    "應許｜徐苓芸",
+    "鴻海｜林錦鴻",
+    "豐格｜熊秀美",
+    "躍勇｜陳勇伯",
+    "北一直轄一｜趙永坦",
+    "北一直轄二｜曹雅瑄",
+    "北一直轄三｜杜昱德"
+  ],
+  "北二": [
+    "仁愛｜姚承捷",
+    "玉山｜楊玲芳",
+    "众山｜呂敏淑",
+    "宏國｜羅志宏",
+    "宏觀｜梁建芳",
+    "忠信｜何振誠",
+    "昊陽｜林浩筠",
+    "昕立｜辜千蓉",
+    "東山｜曾孝媛",
+    "威力｜李育倫",
+    "洽山｜王鐘洽",
+    "凌山｜蔡明恭",
+    "展毓｜嚴毓棟",
+    "崧峰｜張啓峯",
+    "敦煌｜康明正",
+    "華山｜曾素琴",
+    "誠山｜簡聰穎",
+    "慶昇｜林書嬿",
+    "臻觀｜詹秀媚",
+    "駿山｜李郁馨",
+    "駿廷｜程廷鈞",
+    "駿鋮｜林宥成",
+    "鴻山｜許美鴻",
+    "雙贏｜許凱婷",
+    "北二直轄一｜邵榮彥"
+  ],
+  "桃竹": [
+    "上千｜張瀞心",
+    "大昇｜韓昇衛",
+    "孔明｜盧仁德",
+    "北大｜彭美玲",
+    "巨朋｜葉雲清",
+    "亞威｜周淑娥",
+    "昊浱｜鄭家和",
+    "昌羿｜廖怡茹",
+    "金峰｜呂秋蓉",
+    "金躍｜胡躍瀧",
+    "皇城｜孫國城",
+    "虹燁｜許雅虹",
+    "桃園直轄｜郭欣如",
+    "新竹直轄｜杜堅利",
+    "瑞至｜黃欣至",
+    "瑞峰｜蕭莉婷",
+    "瑞興｜莊永興",
+    "躍昇｜許又臻"
+  ],
+  "中嘉": [
+    "上慶｜邱慧娟",
+    "大華｜許政賜",
+    "大銘｜陳怡伶",
+    "太陽｜吳志松",
+    "日兆｜蔡兆梅",
+    "禾順｜陳尹婷",
+    "明冠｜陳虹妙",
+    "金揚｜梁鴻武",
+    "保富｜呂敏忠",
+    "俞傑｜王語蓁",
+    "奕震｜步光中",
+    "威任｜陳威任",
+    "建國｜李建國",
+    "凱旋｜王萬枝",
+    "富山｜詹禕齡",
+    "棠山｜王永棠",
+    "菁業｜陳菁亮",
+    "詠續｜羅安生",
+    "雲林直轄｜謝祥祈",
+    "群富｜劉彥宏",
+    "聖達｜黃智民",
+    "嘉義｜陳俊吉",
+    "嘉誠｜鍾金燕",
+    "嘉銓｜楊嘉麗",
+    "福鵬直轄｜黃傑揚"
+  ],
+  "台南": [
+    "台南｜張正道",
+    "今誠｜王織錦",
+    "立捷｜蘇雅俐",
+    "立富｜謝明宗",
+    "松慶｜廖樹松",
+    "金冠｜傅浚展",
+    "金美｜樊光美",
+    "金達｜洪淑娟",
+    "金豪｜吳麗芳",
+    "冠英｜林美吟",
+    "南英｜曾美絹",
+    "菁英｜張雅菁",
+    "廣慶｜林清香",
+    "慶亞｜林亞麗",
+    "樺慶｜蔡福文"
+  ],
+  "高屏": [
+    "一心｜劉春生",
+    "七賢｜魏麗娟",
+    "力慶｜成一道",
+    "三多｜蕭慧君",
+    "至慶｜簡至妙",
+    "宏慶｜陳澤坤",
+    "佳慶｜王美玲",
+    "尚誠｜張濬翔",
+    "信誠｜汪東森",
+    "冠慶｜劉孟霞",
+    "韋誠｜沈鳳英",
+    "泰誠｜林美足",
+    "高宏｜朱俊聰",
+    "高雄直轄一｜賴汕榕",
+    "國慶｜葉柏汝",
+    "崇慶｜蔡耀焜",
+    "彩榮｜梁麗琴",
+    "翔大｜朱素絹",
+    "順誠｜張婄吟",
+    "睿誠｜李碧珠",
+    "德山｜黃榮德",
+    "樂誠｜林亭瑤",
+    "灞霖｜吳俊毅"
+  ]
+};
 
     const form = document.getElementById("surveyForm");
     const formPanel = document.getElementById("formPanel");
@@ -634,10 +805,14 @@
     const submitBtn = document.getElementById("submitBtn");
     const statusBox = document.getElementById("status");
     const requestIdInput = document.getElementById("requestId");
+    const regionCenter = document.getElementById("regionCenter");
+    const unitManager = document.getElementById("unitManager");
     const dissatisfactionReasonField =
       document.getElementById("dissatisfactionReasonField");
     const dissatisfactionReason =
       document.getElementById("dissatisfactionReason");
+    const dissatisfactionReasonLabel =
+      document.getElementById("dissatisfactionReasonLabel");
     const satisfactionInputs =
       document.querySelectorAll('input[name="satisfaction"]');
 
@@ -647,18 +822,51 @@
     let timeoutTimer = null;
     let pollCount = 0;
 
+    function populateUnitManagers() {
+      const region = regionCenter.value;
+      const managers = REGION_MANAGERS[region] || [];
+
+      unitManager.innerHTML = "";
+
+      const placeholder = document.createElement("option");
+      placeholder.value = "";
+      placeholder.textContent = region
+        ? "請選擇單位｜姓名"
+        : "請先選擇區域中心";
+      unitManager.appendChild(placeholder);
+
+      managers.forEach(function (item) {
+        const option = document.createElement("option");
+        option.value = item;
+        option.textContent = item;
+        unitManager.appendChild(option);
+      });
+
+      unitManager.disabled = !region;
+      unitManager.value = "";
+    }
+
+    regionCenter.addEventListener("change", populateUnitManagers);
+    populateUnitManagers();
+
     function updateDissatisfactionReasonField() {
       const selected = document.querySelector(
         'input[name="satisfaction"]:checked'
       );
 
       const shouldShow =
-        selected && selected.value === "非常不滿意";
+        selected && (selected.value === "不滿意" || selected.value === "非常不滿意");
 
       dissatisfactionReasonField.hidden = !shouldShow;
       dissatisfactionReason.required = Boolean(shouldShow);
 
-      if (!shouldShow) {
+      if (shouldShow) {
+        const level = selected.value;
+        dissatisfactionReasonLabel.firstChild.textContent =
+          "很抱歉讓您有不好的感受，想請問您" +
+          level +
+          "的主要原因是什麼？ ";
+      } else {
         dissatisfactionReason.value = "";
       }
     }
