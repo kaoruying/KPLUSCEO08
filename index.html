@@ -3,8 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <meta name="theme-color" content="#002A6E" />
   <title>K PLUS CEO講堂｜課後回饋</title>
+  <!-- K PLUS SURVEY VERSION: v18 -->
 
   <style>
     :root {
@@ -876,10 +880,7 @@
     function showSuccess() {
       formPanel.style.display = "none";
       successPanel.classList.add("show");
-      successPanel.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
+      window.scrollTo(0, 0);
     }
 
     regionCenter.addEventListener("change", populateUnitManagers);
@@ -919,11 +920,13 @@
       submitBtn.disabled = true;
       submitBtn.textContent = "回饋送出中…";
 
-      // 資料仍在背景送往 Apps Script，畫面不會離開 GitHub。
-      HTMLFormElement.prototype.submit.call(form);
+      // 先立即顯示完成畫面，不等待 Apps Script 或網路回應。
+      showSuccess();
 
-      // 現場填答以速度為優先，不再等待後台確認。
-      window.setTimeout(showSuccess, 450);
+      // 再於背景送出資料到隱藏 iframe。
+      window.setTimeout(function () {
+        HTMLFormElement.prototype.submit.call(form);
+      }, 50);
     });
   </script>
 </body>
