@@ -8,7 +8,7 @@
   <meta http-equiv="Expires" content="0" />
   <meta name="theme-color" content="#002A6E" />
   <title>K PLUS CEO講堂｜課後回饋</title>
-  <!-- K PLUS SURVEY VERSION: v18 -->
+  <!-- K PLUS SURVEY VERSION: v19 -->
 
   <style>
     :root {
@@ -655,6 +655,7 @@
   </main>
 
   <script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby5rvWTHTb_kizJ16_78IrGrZkFbL_VyeYTq30ZMCg3F2O2G6o-ap1oGle6XmU6pm5XkA/exec";
     const REGION_MANAGERS = {
   "北一": [
     "大衛｜翁文昌",
@@ -819,6 +820,14 @@
       document.querySelectorAll('input[name="satisfaction"]');
 
     let isSubmitting = false;
+    let currentRequestId = "";
+    let submitStartedAt = 0;
+    let pollTimer = null;
+    let timeoutTimer = null;
+
+    const MIN_SENDING_MS = 650;
+    const POLL_INTERVAL_MS = 220;
+    const SUBMIT_TIMEOUT_MS = 10000;
 
     function createRequestId() {
       if (window.crypto && typeof window.crypto.randomUUID === "function") {
@@ -877,10 +886,107 @@
       }
     }
 
-    function showSuccess() {
-      formPanel.style.display = "none";
-      successPanel.classList.add("show");
-      window.scrollTo(0, 0);
+    function clearTimers() {
+      window.clearTimeout(pollTimer);
+      window.clearTimeout(timeoutTimer);
+    }
+
+    function resetSubmitButton() {
+      isSubmitting = false;
+      clearTimers();
+      submitBtn.disabled = false;
+      submitBtn.textContent = "送出課後回饋";
+    }
+
+    function showError(message) {
+      resetSubmitButton();
+      statusBox.className = "status error";
+      statusBox.textContent =
+        message || "目前無法確認資料是否送出，請再試一次。";
+    }
+
+    function showSuccessAfterMinimumDelay() {
+      const elapsed = Date.now() - submitStartedAt;
+      const remaining = Math.max(0, MIN_SENDING_MS - elapsed);
+
+      window.setTimeout(function () {
+        if (!isSubmitting) return;
+
+        isSubmitting = false;
+        clearTimers();
+        formPanel.style.display = "none";
+        successPanel.classList.add("show");
+        window.scrollTo(0, 0);
+      }, remaining);
+    }
+
+    function handleResult(data) {
+      if (
+        !isSubmitting ||
+        !data ||
+        data.requestId !== currentRequestId
+      ) {
+        return;
+      }
+
+      if (data.status === "success" || data.ok === true) {
+        showSuccessAfterMinimumDelay();
+        return;
+      }
+
+      if (data.status === "error" || data.ok === false) {
+        showError(data.message || "資料寫入失敗，請重新送出。");
+      }
+    }
+
+    function scheduleNextPoll() {
+      if (!isSubmitting) return;
+
+      pollTimer = window.setTimeout(
+        checkSubmissionStatus,
+        POLL_INTERVAL_MS
+      );
+    }
+
+    function checkSubmissionStatus() {
+      if (!isSubmitting || !currentRequestId) return;
+
+      const callbackName = "__kplusStatusCallback";
+      const oldScript = document.getElementById("kplusStatusScript");
+
+      if (oldScript) {
+        oldScript.remove();
+      }
+
+      window[callbackName] = function (data) {
+        const script = document.getElementById("kplusStatusScript");
+
+        if (script) {
+          script.remove();
+        }
+
+        handleResult(data);
+
+        if (isSubmitting) {
+          scheduleNextPoll();
+        }
+      };
+
+      const script = document.createElement("script");
+      script.id = "kplusStatusScript";
+      script.src =
+        WEB_APP_URL +
+        "?mode=status" +
+        "&requestId=" + encodeURIComponent(currentRequestId) +
+        "&callback=" + encodeURIComponent(callbackName) +
+        "&_=" + Date.now();
+
+      script.onerror = function () {
+        script.remove();
+        scheduleNextPoll();
+      };
+
+      document.body.appendChild(script);
     }
 
     regionCenter.addEventListener("change", populateUnitManagers);
@@ -905,6 +1011,19 @@
 
     updateDissatisfactionReasonField();
 
+    window.addEventListener("message", function (event) {
+      const data = event.data;
+
+      if (
+        !data ||
+        data.type !== "KPLUS_SURVEY_RESULT"
+      ) {
+        return;
+      }
+
+      handleResult(data);
+    });
+
     form.addEventListener("submit", function (event) {
       event.preventDefault();
 
@@ -913,20 +1032,25 @@
       }
 
       isSubmitting = true;
-      requestIdInput.value = createRequestId();
+      currentRequestId = createRequestId();
+      requestIdInput.value = currentRequestId;
+      submitStartedAt = Date.now();
 
       statusBox.className = "status";
       statusBox.textContent = "";
       submitBtn.disabled = true;
-      submitBtn.textContent = "回饋送出中…";
+      submitBtn.textContent = "正在確認資料已送出…";
 
-      // 先立即顯示完成畫面，不等待 Apps Script 或網路回應。
-      showSuccess();
+      timeoutTimer = window.setTimeout(function () {
+        if (isSubmitting) {
+          showError("目前無法確認資料是否送出，請確認網路後再試一次。");
+        }
+      }, SUBMIT_TIMEOUT_MS);
 
-      // 再於背景送出資料到隱藏 iframe。
-      window.setTimeout(function () {
-        HTMLFormElement.prototype.submit.call(form);
-      }, 50);
+      HTMLFormElement.prototype.submit.call(form);
+
+      // 立即開始確認，不再先等 700 毫秒。
+      window.setTimeout(checkSubmissionStatus, 80);
     });
   </script>
 </body>
