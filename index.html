@@ -651,8 +651,6 @@
   </main>
 
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxyq0eLIBa-9xcfir5F2y8e_XMceVlqGuke8pLMHHMV3bbMNA8Iiwz-zKTkv7YrUy9cag/exec";
-
     const REGION_MANAGERS = {
   "北一": [
     "大衛｜翁文昌",
@@ -805,7 +803,6 @@
     const submitBtn = document.getElementById("submitBtn");
     const statusBox = document.getElementById("status");
     const requestIdInput = document.getElementById("requestId");
-    const submissionFrame = document.getElementById("submissionFrame");
     const regionCenter = document.getElementById("regionCenter");
     const unitManager = document.getElementById("unitManager");
     const dissatisfactionReasonField =
@@ -818,12 +815,14 @@
       document.querySelectorAll('input[name="satisfaction"]');
 
     let isSubmitting = false;
-    let currentRequestId = "";
-    let pollTimer = null;
-    let timeoutTimer = null;
-    let iframeFallbackTimer = null;
-    let pollCount = 0;
-    let submissionStarted = false;
+
+    function createRequestId() {
+      if (window.crypto && typeof window.crypto.randomUUID === "function") {
+        return window.crypto.randomUUID();
+      }
+
+      return Date.now().toString(36) + "-" + Math.random().toString(36).slice(2);
+    }
 
     function populateUnitManagers() {
       const region = regionCenter.value;
@@ -849,30 +848,42 @@
       unitManager.value = "";
     }
 
-    regionCenter.addEventListener("change", populateUnitManagers);
-    populateUnitManagers();
-
     function updateDissatisfactionReasonField() {
       const selected = document.querySelector(
         'input[name="satisfaction"]:checked'
       );
 
       const shouldShow =
-        selected && (selected.value === "不滿意" || selected.value === "非常不滿意");
+        selected &&
+        (
+          selected.value === "不滿意" ||
+          selected.value === "非常不滿意"
+        );
 
       dissatisfactionReasonField.hidden = !shouldShow;
       dissatisfactionReason.required = Boolean(shouldShow);
 
       if (shouldShow) {
-        const level = selected.value;
         dissatisfactionReasonLabel.firstChild.textContent =
           "很抱歉，讓您有不好的感受，想請問您" +
-          level +
+          selected.value +
           "的主要原因是什麼？ ";
       } else {
         dissatisfactionReason.value = "";
       }
     }
+
+    function showSuccess() {
+      formPanel.style.display = "none";
+      successPanel.classList.add("show");
+      successPanel.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
+
+    regionCenter.addEventListener("change", populateUnitManagers);
+    populateUnitManagers();
 
     satisfactionInputs.forEach(function (input) {
       input.addEventListener("change", function () {
@@ -893,124 +904,6 @@
 
     updateDissatisfactionReasonField();
 
-    function createRequestId() {
-      if (window.crypto && typeof window.crypto.randomUUID === "function") {
-        return window.crypto.randomUUID();
-      }
-
-      return Date.now().toString(36) + "-" + Math.random().toString(36).slice(2);
-    }
-
-    function clearTimers() {
-      window.clearTimeout(pollTimer);
-      window.clearTimeout(timeoutTimer);
-      window.clearTimeout(iframeFallbackTimer);
-    }
-
-    function resetSubmittingState() {
-      isSubmitting = false;
-      submissionStarted = false;
-      clearTimers();
-      submitBtn.disabled = false;
-      submitBtn.textContent = "送出課後回饋";
-    }
-
-    function showError(message) {
-      resetSubmittingState();
-      statusBox.className = "status error";
-      statusBox.textContent =
-        message || "資料尚未成功送出，請稍後再試一次。";
-    }
-
-    function showSuccess() {
-      isSubmitting = false;
-      submissionStarted = false;
-      clearTimers();
-      formPanel.style.display = "none";
-      successPanel.classList.add("show");
-      successPanel.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
-    }
-
-    submissionFrame.addEventListener("load", function () {
-      if (!isSubmitting || !submissionStarted) {
-        return;
-      }
-
-      /*
-        LINE／手機瀏覽器有時會收不到 Apps Script 的 JSONP 確認，
-        但隱藏 iframe 已完成載入，代表 POST 流程已結束。
-        先保留一小段時間讓後端錯誤訊息優先回傳；
-        若仍沒有收到狀態，就顯示完成畫面，避免一直卡住。
-      */
-      window.clearTimeout(iframeFallbackTimer);
-      iframeFallbackTimer = window.setTimeout(function () {
-        if (isSubmitting && submissionStarted) {
-          showSuccess();
-        }
-      }, 1800);
-    });
-
-    function scheduleNextPoll() {
-      if (!isSubmitting) return;
-
-      pollTimer = window.setTimeout(function () {
-        checkSubmissionStatus();
-      }, 700);
-    }
-
-    function checkSubmissionStatus() {
-      if (!isSubmitting || !currentRequestId) return;
-
-      pollCount += 1;
-
-      const callbackName = "__kplusStatusCallback";
-      const oldScript = document.getElementById("kplusStatusScript");
-      if (oldScript) oldScript.remove();
-
-      window[callbackName] = function (data) {
-        const script = document.getElementById("kplusStatusScript");
-        if (script) script.remove();
-
-        if (!isSubmitting || !data) return;
-
-        if (data.requestId !== currentRequestId) {
-          scheduleNextPoll();
-          return;
-        }
-
-        if (data.status === "success") {
-          showSuccess();
-          return;
-        }
-
-        if (data.status === "error") {
-          showError(data.message || "資料寫入失敗，請重新送出。");
-          return;
-        }
-
-        scheduleNextPoll();
-      };
-
-      const script = document.createElement("script");
-      script.id = "kplusStatusScript";
-      script.src =
-        WEB_APP_URL +
-        "?mode=status" +
-        "&requestId=" + encodeURIComponent(currentRequestId) +
-        "&callback=" + encodeURIComponent(callbackName) +
-        "&_=" + Date.now();
-
-      script.onerror = function () {
-        script.remove();
-        scheduleNextPoll();
-      };
-
-      document.body.appendChild(script);
-    }
-
     form.addEventListener("submit", function (event) {
       event.preventDefault();
 
@@ -1018,25 +911,19 @@
         return;
       }
 
-      currentRequestId = createRequestId();
-      requestIdInput.value = currentRequestId;
-      pollCount = 0;
-
       isSubmitting = true;
-      submissionStarted = true;
+      requestIdInput.value = createRequestId();
+
       statusBox.className = "status";
       statusBox.textContent = "";
       submitBtn.disabled = true;
       submitBtn.textContent = "回饋送出中…";
 
-      timeoutTimer = window.setTimeout(function () {
-        if (isSubmitting) {
-          showError("資料已送出，但確認時間較久，請重新整理後查看。");
-        }
-      }, 30000);
-
+      // 資料仍在背景送往 Apps Script，畫面不會離開 GitHub。
       HTMLFormElement.prototype.submit.call(form);
-      scheduleNextPoll();
+
+      // 現場填答以速度為優先，不再等待後台確認。
+      window.setTimeout(showSuccess, 450);
     });
   </script>
 </body>
