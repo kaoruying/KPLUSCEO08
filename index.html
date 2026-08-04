@@ -476,7 +476,7 @@
 
           <form
             id="surveyForm"
-            action="https://script.google.com/macros/s/AKfycby5rvWTHTb_kizJ16_78IrGrZkFbL_VyeYTq30ZMCg3F2O2G6o-ap1oGle6XmU6pm5XkA/exec"
+            action="https://script.google.com/macros/s/AKfycbxyq0eLIBa-9xcfir5F2y8e_XMceVlqGuke8pLMHHMV3bbMNA8Iiwz-zKTkv7YrUy9cag/exec"
             method="POST"
             target="submissionFrame"
             autocomplete="on"
@@ -651,7 +651,7 @@
   </main>
 
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby5rvWTHTb_kizJ16_78IrGrZkFbL_VyeYTq30ZMCg3F2O2G6o-ap1oGle6XmU6pm5XkA/exec";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxyq0eLIBa-9xcfir5F2y8e_XMceVlqGuke8pLMHHMV3bbMNA8Iiwz-zKTkv7YrUy9cag/exec";
 
     const REGION_MANAGERS = {
   "北一": [
@@ -805,6 +805,7 @@
     const submitBtn = document.getElementById("submitBtn");
     const statusBox = document.getElementById("status");
     const requestIdInput = document.getElementById("requestId");
+    const submissionFrame = document.getElementById("submissionFrame");
     const regionCenter = document.getElementById("regionCenter");
     const unitManager = document.getElementById("unitManager");
     const dissatisfactionReasonField =
@@ -820,7 +821,9 @@
     let currentRequestId = "";
     let pollTimer = null;
     let timeoutTimer = null;
+    let iframeFallbackTimer = null;
     let pollCount = 0;
+    let submissionStarted = false;
 
     function populateUnitManagers() {
       const region = regionCenter.value;
@@ -901,10 +904,12 @@
     function clearTimers() {
       window.clearTimeout(pollTimer);
       window.clearTimeout(timeoutTimer);
+      window.clearTimeout(iframeFallbackTimer);
     }
 
     function resetSubmittingState() {
       isSubmitting = false;
+      submissionStarted = false;
       clearTimers();
       submitBtn.disabled = false;
       submitBtn.textContent = "送出課後回饋";
@@ -919,6 +924,7 @@
 
     function showSuccess() {
       isSubmitting = false;
+      submissionStarted = false;
       clearTimers();
       formPanel.style.display = "none";
       successPanel.classList.add("show");
@@ -927,6 +933,25 @@
         block: "start"
       });
     }
+
+    submissionFrame.addEventListener("load", function () {
+      if (!isSubmitting || !submissionStarted) {
+        return;
+      }
+
+      /*
+        LINE／手機瀏覽器有時會收不到 Apps Script 的 JSONP 確認，
+        但隱藏 iframe 已完成載入，代表 POST 流程已結束。
+        先保留一小段時間讓後端錯誤訊息優先回傳；
+        若仍沒有收到狀態，就顯示完成畫面，避免一直卡住。
+      */
+      window.clearTimeout(iframeFallbackTimer);
+      iframeFallbackTimer = window.setTimeout(function () {
+        if (isSubmitting && submissionStarted) {
+          showSuccess();
+        }
+      }, 1800);
+    });
 
     function scheduleNextPoll() {
       if (!isSubmitting) return;
@@ -998,6 +1023,7 @@
       pollCount = 0;
 
       isSubmitting = true;
+      submissionStarted = true;
       statusBox.className = "status";
       statusBox.textContent = "";
       submitBtn.disabled = true;
